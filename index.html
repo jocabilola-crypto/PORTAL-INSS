@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Painel de Ativação | Conectividade Satélite Premium</title>
     
-    <!-- Carregando bibliotecas essenciais de design -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,8 +24,9 @@
                         chatbg: '#0b1329'
                     },
                     boxShadow: {
-                        'premium': '0 10px 40px -10px rgba(0,0,0,0.3)',
-                        'glow': '0 0 20px rgba(34, 197, 94, 0.5)'
+                        'premium': '0 20px 50px -12px rgba(0,0,0,0.5)',
+                        'glow': '0 0 25px rgba(34, 197, 94, 0.4)',
+                        'glow-red': '0 0 25px rgba(239, 68, 68, 0.4)'
                     }
                 }
             }
@@ -36,45 +36,101 @@
     <style>
         * { -webkit-tap-highlight-color: transparent; }
         html { scroll-behavior: smooth; }
-        body { background-color: #0b0f19; min-height: 100dvh; }
+        body { background-color: #05070f; min-height: 100dvh; overflow-x: hidden; }
 
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0f19; }
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #22c55e; }
 
         .chat-bg-pattern {
-            background: linear-gradient(rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.95)), 
+            background: linear-gradient(rgba(5, 7, 15, 0.96), rgba(5, 7, 15, 0.96)), 
                         url("https://images.unsplash.com/photo-1518364538800-6bcb3f25da49?q=80&w=1470&auto=format&fit=crop");
             background-size: cover;
             background-position: center;
         }
 
-        .msg-enter { opacity: 0; transform: translateY(20px) scale(0.95); animation: slideUpBubble 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        /* Animações e Transições */
+        .msg-enter { 
+            opacity: 0; 
+            transform: translateY(15px) scale(0.98); 
+            animation: slideUpBubble 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+        }
         @keyframes slideUpBubble { to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        .bubble-bot { position: relative; border-top-left-radius: 0; background-color: #1e293b; color: #f8fafc; }
-        .bubble-bot::before { content: ''; position: absolute; top: 0; left: -8px; width: 0; height: 0; border-top: 8px solid #1e293b; border-left: 8px solid transparent; }
+        .bubble-bot { 
+            position: relative; 
+            border-top-left-radius: 0; 
+            background: #111827; 
+            color: #f8fafc; 
+            border: 1px solid #1f2937;
+        }
+        .bubble-bot::before { 
+            content: ''; position: absolute; top: -1px; left: -8px; width: 0; height: 0; 
+            border-top: 10px solid #1f2937; border-left: 8px solid transparent; 
+        }
+        .bubble-bot::after { 
+            content: ''; position: absolute; top: 0; left: -7px; width: 0; height: 0; 
+            border-top: 8px solid #111827; border-left: 7px solid transparent; 
+        }
         
-        .bubble-user { position: relative; border-top-right-radius: 0; background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); }
-        .bubble-user::before { content: ''; position: absolute; top: 0; right: -8px; width: 0; height: 0; border-top: 8px solid #15803d; border-right: 8px solid transparent; }
+        .bubble-user { 
+            position: relative; 
+            border-top-right-radius: 0; 
+            background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); 
+        }
+        .bubble-user::before { 
+            content: ''; position: absolute; top: 0; right: -8px; width: 0; height: 0; 
+            border-top: 8px solid #15803d; border-right: 8px solid transparent; 
+        }
 
-        .typing-indicator { display: flex; align-items: center; gap: 4px; padding: 12px 16px; background: #1e293b; border-radius: 18px; width: fit-content; }
-        .dot { width: 6px; height: 6px; background-color: #64748b; border-radius: 50%; animation: typing 1.4s infinite ease-in-out both; }
+        .typing-indicator { display: flex; align-items: center; gap: 5px; padding: 14px 20px; background: #111827; border-radius: 20px; width: fit-content; }
+        .dot { width: 7px; height: 7px; background-color: #22c55e; border-radius: 50%; animation: typing 1.4s infinite ease-in-out both; }
         .dot:nth-child(1) { animation-delay: -0.32s; } .dot:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes typing { 0%, 80%, 100% { transform: scale(0); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
+        @keyframes typing { 0%, 80%, 100% { transform: scale(0.5); opacity: 0.3; } 40% { transform: scale(1.1); opacity: 1; } }
 
-        .btn-action-pulse { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); animation: pulse-green 2s infinite; }
-        @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); } 70% { box-shadow: 0 0 0 12px rgba(34, 197, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } }
+        .btn-action-pulse { 
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); 
+            animation: pulse-green 2.2s infinite; 
+            position: relative;
+            overflow: hidden;
+        }
+        @keyframes pulse-green { 
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); } 
+            70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); } 
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } 
+        }
 
-        .option-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        .option-btn:hover:not(:disabled) { transform: translateY(-2px); border-color: #22c55e; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2); }
-        .option-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        /* Efeito Shimmer de Brilho em Elementos Importantes */
+        .shimmer::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            transform: translateX(-100%);
+            background-image: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 20%, rgba(255,255,255,0.2) 60%, rgba(255,255,255,0) 100%);
+            animation: shimmer 2.5s infinite;
+        }
+        @keyframes shimmer { 100% { transform: translateX(100%); } }
     </style>
 </head>
-<body class="flex flex-col lg:flex-row text-slate-100 bg-slate-955 lg:bg-slate-900 min-h-screen">
+<body class="flex flex-col lg:flex-row text-slate-100 min-h-screen relative">
 
-    <!-- Painel Lateral -->
-    <div class="w-full lg:w-[42%] xl:w-[38%] bg-slate-950 text-white flex flex-col shrink-0 lg:sticky lg:top-0 lg:h-screen relative overflow-hidden justify-between p-6 lg:p-12 py-10 lg:py-16">
+    <div id="ios-blocker" class="hidden fixed inset-0 bg-slate-950/98 backdrop-blur-md z-[9999] flex flex-col items-center justify-center p-6 text-center">
+        <div class="w-20 h-20 bg-red-500/10 border border-red-500/30 rounded-3xl flex items-center justify-center text-red-500 mb-6 shadow-glow-red animate-bounce">
+            <i class="ph-fill ph-prohibit text-5xl"></i>
+        </div>
+        <h2 class="text-3xl font-black text-white mb-2">Acesso Não Permitido</h2>
+        <p class="text-red-400 font-bold uppercase tracking-widest text-xs mb-4">Incompatibilidade de Sistema</p>
+        <p class="text-slate-400 max-w-md text-sm leading-relaxed mb-6">
+            Identificamos que você está usando um dispositivo <strong class="text-white">iOS (iPhone/iPad)</strong>. O nosso sistema de ativação via satélite requer APIs nativas do núcleo <strong class="text-emerald-400">Android</strong> para calibração de sinal de rádio.
+        </p>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-3 max-w-xs text-left">
+            <i class="ph ph-android-logo text-3xl text-emerald-500"></i>
+            <span class="text-xs text-slate-300 font-medium leading-tight">Por favor, acesse o painel de ativação utilizando um smartphone Android.</span>
+        </div>
+    </div>
+
+    <div class="w-full lg:w-[42%] xl:w-[38%] bg-slate-950 text-white flex flex-col shrink-0 lg:sticky lg:top-0 lg:h-screen relative overflow-hidden justify-between p-6 lg:p-12 py-10 lg:py-16 border-b lg:border-b-0 lg:border-r border-slate-900">
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-20 pointer-events-none">
             <div class="absolute -top-[20%] -left-[10%] w-[70%] h-[50%] bg-emerald-600 rounded-full blur-[120px]"></div>
             <div class="absolute bottom-[10%] -right-[20%] w-[60%] h-[60%] bg-blue-500 rounded-full blur-[150px]"></div>
@@ -82,23 +138,38 @@
 
         <div class="relative z-10 flex flex-col h-full justify-between gap-10 lg:gap-0">
             <div>
-                <div class="flex items-center gap-3 mb-8 lg:mb-16">
-                    <div class="w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center text-white shadow-glow">
-                        <i class="ph-fill ph-satellite-satellite text-3xl"></i>
+                <div class="flex items-center justify-between mb-8 lg:mb-14">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl flex items-center justify-center text-white shadow-glow">
+                            <i class="ph-fill ph-satellite-satellite text-2xl"></i>
+                        </div>
+                        <h1 class="text-2xl font-black tracking-tight">Sinal<span class="text-emerald-400 font-medium">Satélite</span></h1>
                     </div>
-                    <h1 class="text-3xl font-extrabold tracking-tight">Sinal<span class="text-emerald-400">Satélite</span></h1>
+                    
+                    <span class="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full shadow-inner animate-pulse">
+                        <i class="ph-fill ph-android-logo text-sm"></i> Apenas Android
+                    </span>
                 </div>
 
-                <h2 class="text-4xl lg:text-5xl xl:text-6xl font-black leading-[1.1] mb-4 lg:mb-6">
-                    Conexão estável<br>liberada em<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-400">segundos.</span>
+                <div class="mb-8 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 flex gap-3 items-start relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-red-500 text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-bl-lg">iOS Não Suportado</div>
+                    <i class="ph-fill ph-info text-red-400 text-xl shrink-0 mt-0.5"></i>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-200">Compatibilidade Limitada</h4>
+                        <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">Este painel só executará o mapeamento se você estiver em ambiente <strong class="text-white">Android</strong>. Tentativas no iOS serão negadas.</p>
+                    </div>
+                </div>
+
+                <h2 class="text-4xl lg:text-5xl font-black leading-[1.1] mb-4 lg:mb-6">
+                    Conexão estável<br>liberada em<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">segundos.</span>
                 </h2>
-                <p class="text-base lg:text-lg text-slate-300 leading-relaxed max-w-md">
-                    Verifique a cobertura do satélite diretamente no seu endereço, configure seu receptor e receba acesso imediato com o melhor sinal de transmissão.
+                <p class="text-sm lg:text-base text-slate-400 leading-relaxed max-w-md">
+                    Verifique a cobertura direta na sua região, configure seu receptor e receba acesso imediato com protocolo ultra-rápido de alta capacidade.
                 </p>
             </div>
 
             <div class="space-y-6 lg:space-y-8">
-                <div class="flex items-center gap-4 bg-slate-900/50 p-4 rounded-2xl border border-slate-800/50 backdrop-blur-sm w-max">
+                <div class="flex items-center gap-4 bg-slate-900/40 p-4 rounded-2xl border border-slate-800/60 backdrop-blur-sm w-max">
                     <div class="flex -space-x-3">
                         <img class="w-10 h-10 rounded-full border-2 border-slate-900" src="https://i.pravatar.cc/100?img=11" alt="User">
                         <img class="w-10 h-10 rounded-full border-2 border-slate-900" src="https://i.pravatar.cc/100?img=12" alt="User">
@@ -112,7 +183,7 @@
                     </div>
                 </div>
 
-                <div class="flex gap-6 items-center pt-6 border-t border-slate-800">
+                <div class="flex gap-6 items-center pt-6 border-t border-slate-900">
                     <div class="flex items-center gap-2 text-slate-400">
                         <i class="ph ph-shield-check text-2xl text-emerald-400"></i>
                         <div class="text-xs font-semibold leading-tight">Servidor<br>Ultra Seguro</div>
@@ -126,27 +197,26 @@
         </div>
     </div>
 
-    <!-- Área do Chat -->
-    <div id="chat-section" class="flex-1 flex flex-col bg-slate-900 lg:rounded-l-[2.5rem] lg:-ml-6 z-20 shadow-[-10px_0_30px_rgba(0,0,0,0.3)] relative min-h-screen lg:h-screen lg:overflow-hidden">
+    <div id="chat-section" class="flex-1 flex flex-col bg-slate-950 lg:rounded-l-[2.5rem] lg:-ml-6 z-20 shadow-[-15px_0_40px_rgba(0,0,0,0.6)] relative min-h-screen lg:h-screen lg:overflow-hidden">
         
-        <!-- Cabeçalho do Chat -->
-        <header class="sticky top-0 bg-slate-900/95 backdrop-blur px-4 py-3.5 border-b border-slate-800 flex items-center justify-between shadow-sm z-30 shrink-0">
+        <header class="sticky top-0 bg-slate-950/80 backdrop-blur-md px-4 lg:px-8 py-4 border-b border-slate-900 flex items-center justify-between shadow-sm z-30 shrink-0">
             <div class="flex items-center gap-3">
-                <div class="lg:hidden w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center text-white mr-2">
+                <div class="lg:hidden w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center text-white mr-1 shadow-glow">
                     <i class="ph-fill ph-satellite-satellite text-xl"></i>
                 </div>
                 
                 <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=120&auto=format&fit=crop" alt="Suporte" class="w-11 h-11 rounded-full object-cover border-2 border-slate-700 shadow-sm">
-                    <div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-slate-900 rounded-full"></div>
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=120&auto=format&fit=crop" alt="Suporte" class="w-11 h-11 rounded-full object-cover border-2 border-slate-800 shadow-sm">
+                    <div class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-slate-950 rounded-full"></div>
                 </div>
                 <div>
                     <h2 class="font-bold text-slate-100 text-[15px] leading-tight flex items-center gap-1">
-                        Suporte Satelital
-                        <i class="ph-fill ph-seal-check text-emerald-500 text-sm" title="Verificado"></i>
+                        Atendente Satelital
+                        <i class="ph-fill ph-seal-check text-emerald-400 text-sm" title="Verificado"></i>
                     </h2>
-                    <p class="text-xs font-medium text-emerald-400 flex items-center gap-1">
-                        <span>Online</span>
+                    <p class="text-xs font-medium text-emerald-400 flex items-center gap-1.5">
+                        <span class="inline-block w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+                        <span id="header-status">Conexão Ativa</span>
                         <span class="hidden gap-[2px] mt-1" id="typing-dots">
                             <span class="w-1 h-1 bg-emerald-400 rounded-full animate-bounce" style="animation-delay: 0s"></span>
                             <span class="w-1 h-1 bg-emerald-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
@@ -156,39 +226,49 @@
                 </div>
             </div>
             
-            <div class="flex items-center gap-3 text-slate-400">
-                <button onclick="resetApp()" class="p-2 hover:bg-slate-800 hover:text-emerald-400 rounded-full transition-colors" title="Reiniciar">
+            <div class="flex items-center gap-2">
+                <span class="hidden sm:flex items-center gap-1 text-[10px] font-bold text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-md">
+                    <i class="ph ph-device-mobile"></i> Target: Android
+                </span>
+                <button onclick="resetApp()" class="p-2.5 hover:bg-slate-900 hover:text-emerald-400 rounded-full transition-colors text-slate-400" title="Reiniciar">
                     <i class="ph ph-arrow-counter-clockwise text-xl"></i>
                 </button>
             </div>
         </header>
 
-        <main id="chat-container" class="flex-1 chat-bg-pattern p-4 pb-12 flex flex-col gap-4 relative lg:overflow-y-auto">
+        <div class="bg-red-950/80 backdrop-blur border-b border-red-900/30 px-4 py-2 text-center text-xs text-red-300 font-semibold flex items-center justify-center gap-2 shrink-0">
+            <i class="ph-bold ph-warning text-sm text-red-400"></i>
+            <span>Compatibilidade: Apenas aparelhos <strong class="text-white">Android</strong>. Não compatível com iOS.</span>
+        </div>
+
+        <main id="chat-container" class="flex-1 chat-bg-pattern p-4 lg:p-8 pb-12 flex flex-col gap-4 relative lg:overflow-y-auto">
             <div class="flex justify-center my-2">
-                <span class="bg-slate-950/80 backdrop-blur text-slate-400 text-[11px] font-bold px-3 py-1.5 rounded-lg shadow-sm uppercase tracking-wider">Atendimento Digital</span>
+                <span class="bg-slate-950/90 border border-slate-800/80 backdrop-blur text-slate-400 text-[10px] font-black px-4 py-1.5 rounded-full shadow-sm uppercase tracking-widest">
+                    Varredura Satelital Habilitada
+                </span>
             </div>
             <div id="messages-list" class="flex flex-col gap-4 w-full max-w-3xl mx-auto"></div>
         </main>
 
-        <footer class="sticky bottom-0 bg-slate-950 border-t border-slate-800 px-4 py-3 shrink-0 z-30">
-            <form id="input-form" class="max-w-3xl mx-auto flex items-center gap-2 relative">
-                <div id="error-tooltip" class="absolute -top-10 left-0 bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-md opacity-0 transition-opacity pointer-events-none transform -translate-y-2 flex items-center gap-1">
-                    <i class="ph-fill ph-warning-circle"></i> <span id="error-text">Entrada inválida</span>
-                    <div class="absolute -bottom-1 left-4 w-2 h-2 bg-red-500 rotate-45"></div>
+        <footer class="sticky bottom-0 bg-slate-950 border-t border-slate-900/80 px-4 py-4 shrink-0 z-30">
+            <form id="input-form" class="max-w-3xl mx-auto flex items-center gap-3 relative">
+                <div id="error-tooltip" class="absolute -top-12 left-2 bg-red-500 text-white text-xs font-black px-4 py-2 rounded-xl shadow-lg opacity-0 transition-all pointer-events-none transform -translate-y-2 flex items-center gap-1.5 z-40">
+                    <i class="ph-fill ph-warning-circle text-base"></i> <span id="error-text">Entrada inválida</span>
+                    <div class="absolute -bottom-1.5 left-4 w-3 h-3 bg-red-500 rotate-45"></div>
                 </div>
 
-                <button type="button" class="p-2 text-slate-500 hover:text-emerald-500 transition-colors" disabled>
+                <button type="button" class="p-2.5 text-slate-600 hover:text-emerald-500 transition-colors" disabled>
                     <i class="ph ph-plus-circle text-2xl"></i>
                 </button>
                 
                 <div class="flex-1 relative">
                     <input type="text" id="user-input" disabled
-                        class="w-full bg-slate-900 border border-slate-800 focus:bg-slate-950 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-900 rounded-full px-5 py-3 text-[15px] outline-none transition-all disabled:opacity-60 disabled:cursor-not-allowed font-medium text-slate-200" 
+                        class="w-full bg-slate-900/90 border border-slate-800 focus:bg-slate-950 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-950/50 rounded-2xl px-6 py-3.5 text-[15px] outline-none transition-all disabled:opacity-40 disabled:cursor-not-allowed font-medium text-slate-100" 
                         placeholder="Aguarde..." autocomplete="off">
                 </div>
 
                 <button type="submit" id="send-btn" disabled
-                    class="w-12 h-12 bg-emerald-600 text-white rounded-full flex items-center justify-center hover:bg-emerald-700 transition-colors shadow-md disabled:opacity-50 disabled:bg-slate-800 disabled:cursor-not-allowed shrink-0 group">
+                    class="w-13 h-13 bg-gradient-to-tr from-emerald-500 to-teal-500 text-white rounded-2xl flex items-center justify-center hover:opacity-95 transition-all shadow-glow disabled:opacity-30 disabled:bg-slate-800 disabled:shadow-none disabled:cursor-not-allowed shrink-0 group">
                     <i class="ph-fill ph-paper-plane-right text-xl group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
                 </button>
             </form>
@@ -225,6 +305,17 @@
             return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
         };
 
+        // Detecção de Dispositivo (Garante bloqueio visual de iOS e priorização de Android)
+        function checkDeviceCompatibility() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+            if (isIOS) {
+                document.getElementById('ios-blocker').classList.remove('hidden');
+                return false;
+            }
+            return true;
+        }
+
         function scrollToBottom() {
             setTimeout(() => {
                 chatContainer.scrollTo({ top: chatContainer.scrollHeight + 1000, behavior: 'smooth' });
@@ -236,12 +327,12 @@
             const time = getTime();
             const parsedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             return `
-                <div class="flex gap-2 w-full max-w-[95%] md:max-w-[85%] msg-enter mb-2">
-                    <img src="${APP_CONFIG.botAvatar}" class="w-8 h-8 rounded-full shadow-sm shrink-0 mt-auto mb-1 border border-slate-700">
+                <div class="flex gap-3.5 w-full max-w-[95%] md:max-w-[85%] msg-enter mb-2">
+                    <img src="${APP_CONFIG.botAvatar}" class="w-9 h-9 rounded-full shadow-sm shrink-0 mt-auto mb-1 border border-slate-800">
                     <div class="flex flex-col gap-1 min-w-0">
-                        <div class="bg-slate-800 text-slate-100 p-3.5 rounded-2xl bubble-bot shadow-sm border border-slate-700 text-[15px] leading-relaxed relative">
+                        <div class="bg-slate-900 text-slate-100 p-4 rounded-3xl bubble-bot shadow-md text-[15px] leading-relaxed relative">
                             ${parsedText}
-                            <div class="text-[10px] text-slate-400 text-right mt-1.5 float-right ml-3">${time}</div>
+                            <div class="text-[10px] text-slate-500 text-right mt-2 float-right ml-3">${time}</div>
                         </div>
                         ${extraContent}
                     </div>
@@ -254,10 +345,10 @@
             return `
                 <div class="flex justify-end w-full msg-enter mb-2">
                     <div class="flex flex-col items-end gap-1 max-w-[95%] md:max-w-[85%]">
-                        <div class="text-white p-3.5 rounded-2xl bubble-user shadow-md text-[15px] leading-relaxed relative">
+                        <div class="text-white p-4 rounded-3xl bubble-user shadow-glow text-[15px] leading-relaxed relative">
                             ${text}
-                            <div class="text-[10px] text-emerald-100 text-right mt-1 flex items-center justify-end gap-1 float-right ml-3">
-                                ${time} <i class="ph-bold ph-checks text-white"></i>
+                            <div class="text-[10px] text-emerald-100 text-right mt-1.5 flex items-center justify-end gap-1 float-right ml-3">
+                                ${time} <i class="ph-bold ph-checks text-white text-xs"></i>
                             </div>
                         </div>
                     </div>
@@ -267,14 +358,14 @@
 
         async function showTyping(duration) {
             state.isTyping = true;
-            document.querySelector('header h2 + p span:first-child').innerText = 'Verificando';
+            document.getElementById('header-status').innerText = 'Analisando dados...';
             document.getElementById('typing-dots').classList.remove('hidden');
             document.getElementById('typing-dots').classList.add('flex');
 
             const id = 'typing-' + Date.now();
             const html = `
-                <div id="${id}" class="flex gap-2 w-full max-w-[90%] msg-enter mb-2">
-                    <img src="${APP_CONFIG.botAvatar}" class="w-8 h-8 rounded-full shadow-sm shrink-0 mt-auto mb-1 border border-slate-700">
+                <div id="${id}" class="flex gap-3.5 w-full max-w-[90%] msg-enter mb-2">
+                    <img src="${APP_CONFIG.botAvatar}" class="w-9 h-9 rounded-full shadow-sm shrink-0 mt-auto mb-1 border border-slate-800">
                     <div class="typing-indicator bubble-bot">
                         <div class="dot"></div>
                         <div class="dot"></div>
@@ -286,7 +377,7 @@
             await sleep(duration);
             document.getElementById(id)?.remove();
             state.isTyping = false;
-            document.querySelector('header h2 + p span:first-child').innerText = 'Online';
+            document.getElementById('header-status').innerText = 'Conexão Ativa';
             document.getElementById('typing-dots').classList.add('hidden');
             document.getElementById('typing-dots').classList.remove('flex');
         }
@@ -300,17 +391,32 @@
 
         function showError(msg) {
             errorText.innerText = msg;
-            errorTooltip.classList.remove('opacity-0', 'pointer-events-none');
-            setTimeout(() => errorTooltip.classList.add('opacity-0', 'pointer-events-none'), 3000);
+            errorTooltip.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
+            errorTooltip.classList.add('translate-y-0');
+            setTimeout(() => {
+                errorTooltip.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+                errorTooltip.classList.remove('translate-y-0');
+            }, 3000);
         }
 
         function waitForInput(key, type, placeholder, validatorFn, errorMsg) {
-            userInput.disabled = false; sendBtn.disabled = false; userInput.type = type; userInput.placeholder = placeholder; userInput.value = ''; userInput.focus();
+            userInput.disabled = false; 
+            sendBtn.disabled = false; 
+            userInput.type = type; 
+            userInput.placeholder = placeholder; 
+            userInput.value = ''; 
+            userInput.focus();
             currentValidator = { fn: validatorFn, msg: errorMsg };
             return new Promise(resolve => {
                 currentResolve = (val) => {
-                    userInput.disabled = true; sendBtn.disabled = true; userInput.value = ''; userInput.placeholder = 'Aguarde...';
-                    state.data[key] = val; messagesList.insertAdjacentHTML('beforeend', createUserMessageHTML(val)); scrollToBottom(); resolve();
+                    userInput.disabled = true; 
+                    sendBtn.disabled = true; 
+                    userInput.value = ''; 
+                    userInput.placeholder = 'Aguarde...';
+                    state.data[key] = val; 
+                    messagesList.insertAdjacentHTML('beforeend', createUserMessageHTML(val)); 
+                    scrollToBottom(); 
+                    resolve();
                 };
             });
         }
@@ -320,8 +426,12 @@
             if(!currentResolve) return;
             const val = userInput.value;
             if(currentValidator && !currentValidator.fn(val)) { showError(currentValidator.msg); return; }
-            const resolveFn = currentResolve; currentResolve = null; currentValidator = null;
-            resolveFn(val); state.step++; executeStep();
+            const resolveFn = currentResolve; 
+            currentResolve = null; 
+            currentValidator = null;
+            resolveFn(val); 
+            state.step++; 
+            executeStep();
         });
 
         function resetApp() {
@@ -333,15 +443,15 @@
         async function simularVerificacaoSatelite() {
             const idProgress = 'progress-' + Date.now();
             const progressHTML = `
-                <div id="${idProgress}" class="bg-slate-800 border border-slate-700 p-4 rounded-2xl shadow-sm w-full max-w-[320px] mt-1 msg-enter text-left">
-                    <div class="flex items-center gap-2 text-emerald-400 mb-2">
+                <div id="${idProgress}" class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-premium w-full max-w-[340px] mt-2 msg-enter text-left relative overflow-hidden">
+                    <div class="flex items-center gap-2.5 text-emerald-400 mb-3">
                         <i class="ph-bold ph-radar animate-spin text-xl"></i>
-                        <span class="text-xs font-semibold uppercase tracking-wider">Buscando Sinal no Endereço</span>
+                        <span class="text-[10px] font-black uppercase tracking-widest">Varredura de Banda K</span>
                     </div>
-                    <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden mb-2">
-                        <div id="bar-${idProgress}" class="bg-emerald-500 h-full w-0 transition-all duration-300"></div>
+                    <div class="w-full bg-slate-850 h-2 rounded-full overflow-hidden mb-3 border border-slate-800">
+                        <div id="bar-${idProgress}" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full w-0 transition-all duration-350"></div>
                     </div>
-                    <p id="status-${idProgress}" class="text-xs text-slate-300">Iniciando varredura geo-posicionada...</p>
+                    <p id="status-${idProgress}" class="text-xs text-slate-400 font-medium leading-relaxed">Iniciando varredura geo-posicionada...</p>
                 </div>
             `;
             messagesList.insertAdjacentHTML('beforeend', createBotMessageHTML(`Iniciando a calibração com o satélite para a região de **${state.data.estado}**...`, progressHTML));
@@ -351,14 +461,14 @@
             const statusText = document.getElementById(`status-${idProgress}`);
 
             const etapas = [
-                { p: 15, text: "Conectando ao Satélite principal StarSat-V4..." },
-                { p: 40, text: "Mapeando coordenadas locais de recepção..." },
-                { p: 75, text: "Ajustando intensidade de decodificação de sinal..." },
-                { p: 100, text: "Sinal localizado com 100% de integridade e estabilidade!" }
+                { p: 20, text: "Buscando satélites compatíveis com Android..." },
+                { p: 50, text: "Calibrando latência do link de subida..." },
+                { p: 80, text: "Liberando canal prioritário de áudio e vídeo..." },
+                { p: 100, text: "Link de satélite estabelecido e pronto!" }
             ];
 
             for (let etapa of etapas) {
-                await sleep(1500);
+                await sleep(1800);
                 bar.style.width = etapa.p + '%';
                 statusText.innerText = etapa.text;
             }
@@ -367,11 +477,23 @@
         }
 
         async function executeStep() {
+            if (!checkDeviceCompatibility()) return; // Impede execução do chat caso seja iOS
+
             switch(state.step) {
                 case 0:
                     await sendBotMessage("Olá! Seja muito bem-vindo ao nosso **Portal de Ativação e Conectividade Satélite**. 👋", '', 1000);
                     await sendBotMessage("Antes de liberarmos o seu sinal, preciso coletar alguns dados rápidos para mapearmos a recepção na sua área.", '', 1200);
-                    await sendBotMessage("Por favor, digite o seu **Nome Completo**:", '', 1000);
+                    
+                    // Alerta importante de dispositivo no fluxo de mensagens
+                    const iosWarningBubble = `
+                        <div class="bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs p-4 rounded-2xl w-full max-w-[340px] mt-1 msg-enter leading-relaxed">
+                            <div class="flex items-center gap-1.5 font-bold mb-1 text-amber-400">
+                                <i class="ph-fill ph-warning"></i> IMPORTANTE:
+                            </div>
+                            Para prosseguir, certifique-se de que o seu receptor é compatível e que este processo está sendo finalizado de um aparelho **Android**. Nosso sistema não valida acessos vindos de aparelhos Apple (iOS).
+                        </div>
+                    `;
+                    await sendBotMessage("Por favor, digite o seu **Nome Completo** para começarmos:", iosWarningBubble, 1000);
                     await waitForInput('nome', 'text', 'Digite seu nome...', v => v.trim().length > 2, 'Por favor, digite um nome válido.');
                     break;
                 case 1:
@@ -388,30 +510,29 @@
                     await waitForInput('endereco', 'text', 'Rua, número e bairro...', v => v.trim().length > 5, 'Por favor, digite um endereço mais completo.');
                     break;
                 case 4:
-                    // Inicia animação de simulação de satélite no endereço fornecido
                     await simularVerificacaoSatelite();
                     state.step++;
                     executeStep();
                     break;
                 case 5:
-                    // Exibe a oferta final com o valor de R$ 109,99 e o botão de teste de 10 minutos
                     const offerHTML = `
-                        <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-premium overflow-hidden w-full max-w-[300px] mt-1 msg-enter text-left">
-                            <div class="bg-emerald-950/50 p-4 border-b border-emerald-900/50 text-center">
-                                <p class="text-[10px] font-extrabold text-emerald-400 uppercase tracking-widest mb-1">Sinal Pronto para Liberação</p>
+                        <div class="bg-slate-900 border border-slate-800 rounded-3xl shadow-premium overflow-hidden w-full max-w-[320px] mt-2 msg-enter text-left relative shimmer">
+                            <div class="bg-emerald-950/30 p-5 border-b border-emerald-900/40 text-center relative z-10">
+                                <p class="text-[9px] font-black text-emerald-400 uppercase tracking-widest mb-1.5">Sinal Pronto para Liberação</p>
                                 <span class="text-3xl font-black text-white">R$ 109,99</span>
                                 <p class="text-xs text-slate-400 mt-1">Primeiro mês promocional</p>
                             </div>
-                            <div class="p-4 space-y-4">
-                                <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-2">
+                            <div class="p-5 space-y-4 relative z-10">
+                                <div class="bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800/80 text-xs text-slate-300 space-y-2.5">
                                     <div class="flex justify-between"><span>📱 Aparelho:</span> <strong class="text-slate-100">${state.data.aparelho}</strong></div>
                                     <div class="flex justify-between"><span>📍 Região:</span> <strong class="text-slate-100">${state.data.estado}</strong></div>
-                                    <div class="flex justify-between"><span>⏱️ Teste:</span> <strong class="text-emerald-400">10 Minutos Liberados</strong></div>
+                                    <div class="flex justify-between"><span>🤖 Sistema:</span> <strong class="text-emerald-400">Exclusivo Android</strong></div>
+                                    <div class="flex justify-between border-t border-slate-800/80 pt-2"><span>⏱️ Teste:</span> <strong class="text-emerald-400">10 Minutos Liberados</strong></div>
                                 </div>
                                 <a href="https://wa.me/${APP_CONFIG.whatsapp}?text=Olá,%20gostaria%20de%20ativar%20meu%20teste%20grátis%20de%2010%20minutos%20para%20o%20aparelho%20${encodeURIComponent(state.data.aparelho)}%20no%20endereço%20${encodeURIComponent(state.data.endereco)}" 
                                    target="_blank" 
-                                   class="btn-action-pulse w-full text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-opacity text-sm shadow-md">
-                                    <i class="ph-bold ph-play-circle text-lg animate-pulse"></i> Ativar Teste Grátis (10 min)
+                                   class="btn-action-pulse w-full text-white font-black py-4 px-4 rounded-2xl flex items-center justify-center gap-2 hover:opacity-95 transition-all text-xs shadow-glow uppercase tracking-wider">
+                                    <i class="ph-bold ph-play-circle text-xl"></i> Ativar Teste Grátis
                                 </a>
                             </div>
                         </div>
